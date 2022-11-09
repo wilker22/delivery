@@ -21,7 +21,11 @@ CI_ENVIRONMENT = development
 # APP
 #--------------------------------------------------------------------
 
+<<<<<<< HEAD
 # app.baseURL = 'http://localhost/delivery/public/'
+=======
+app.baseURL = 'http://localhost/delivery/public/'
+>>>>>>> 8ba7e3d73aba89acb56b06d1de2b1f236dfa4767
 # If you have trouble with `.`, you could also use `_`.
 # app_baseURL = ''
 # app.forceGlobalSecureRequests = false
@@ -40,13 +44,13 @@ CI_ENVIRONMENT = development
 # DATABASE
 #--------------------------------------------------------------------
 
-# database.default.hostname = localhost
-# database.default.database = ci4
-# database.default.username = root
-# database.default.password = root
-# database.default.DBDriver = MySQLi
-# database.default.DBPrefix =
-# database.default.port = 3306
+ database.default.hostname = localhost
+ database.default.database = food
+ database.default.username = root
+ database.default.password = 
+ database.default.DBDriver = MySQLi
+ database.default.DBPrefix =
+ database.default.port = 3306
 
 # database.tests.hostname = localhost
 # database.tests.database = ci4_test

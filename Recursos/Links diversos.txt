@@ -1,0 +1,7 @@
+Link para view de detalhes do produto
+https://www.bootdey.com/snippets/view/product-full-detail#css
+
+
+
+HTML para á área do cliente:
+https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp
