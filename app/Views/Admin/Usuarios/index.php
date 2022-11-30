@@ -23,7 +23,7 @@
                 <h4 class="card-title"><?php echo $titulo ?></h4>
 
                 <div class="ui-widget">
-                    <input id="query" name="query" class="form-control bg-light mb-5">
+                    <input id="query" name="query" placeholder="Pesquise por um usuário" class="form-control bg-light mb-5">
                 </div>
 
                 <div class="table-responsive">
@@ -32,7 +32,7 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>E-mail</th>
-                                <th>CPF/th>
+                                <th>CPF</th>
                                 <th>Ativo</th>
                             </tr>
                         </thead>
@@ -40,7 +40,12 @@
                             <?php foreach ($usuarios as $usuario) : ?>
 
                                 <tr>
-                                    <td><?php echo $usuario->nome ?></td>
+                                    <td>
+                                        <a href="<?php echo site_url("admin/usuarios/show/$usuario->id");?>">
+                                        <?php echo $usuario->nome ?>
+                                        </a>
+                                        
+                                    </td>
                                     <td><?php echo $usuario->email ?></td>
                                     <td><?php echo $usuario->cpf ?></td>
                                     <td><?php echo ($usuario->ativo ? '<label class="badge badge-primary">Sim</label>' : '<label class="badge badge-danger">Não</label>'); ?></td>
@@ -66,11 +71,12 @@
 
 
 <?php echo $this->section('scripts'); ?>
-    <script src="<?php echo site_url('admin/vendors/auto-complete/jquery-ui.js'); ?>"></script>
+<script src="<?php echo site_url('admin/vendors/auto-complete/jquery-ui.js'); ?>"></script>
 
-    <script>
+<script>
+    $(function() {
         $("#query").autocomplete({
-            source: function (request, response){
+            source: function(request, response) {
 
                 $.ajax({
                     url: "<?php echo site_url('admin/usuarios/procurar'); ?>",
@@ -79,29 +85,26 @@
                         term: request.term
                     },
                     success: function(data) {
-                        if(data.length < 1){
-                            var data = [
-                                {
-                                    label: 'Usuário não encontrado',
-                                    value: -1,
-                                }
-                            ];
+                        if (data.length < 1) {
+                            var data = [{
+                                label: 'Usuário não encontrado',
+                                value: -1,
+                            }];
                         }
                         response(data);
                     },
-                });//fim ajax
+                }); //fim ajax
             },
             minLength: 1,
-            select: function(event, ui){
-                if(ui.item.value == -1){
+            select: function(event, ui) {
+                if (ui.item.value == -1) {
                     $(this).val("");
                     return false;
-                }else{
-                    window.location.href = '<?php echo site_url('admin/usuario/show/');?>' + ui.item.id;
+                } else {
+                    window.location.href = '<?php echo site_url('admin/usuario/show/'); ?>' + ui.item.id;
                 }
             },
-        });//fim autocomplete
-    
-        
-    </script>
+        }); //fim autocomplete
+    });
+</script>
 <?php echo $this->endSection(); ?>
