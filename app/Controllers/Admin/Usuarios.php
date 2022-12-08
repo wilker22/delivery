@@ -22,6 +22,8 @@ class Usuarios extends BaseController
             'usuarios' => $this->usuarioModel->findAll()
         ];
 
+       // session()->set('sucesso', 'Olá Wilker, que bom que está conosco!');
+
         return view('Admin/Usuarios/index', $data);
     }
 

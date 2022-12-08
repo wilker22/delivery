@@ -19,6 +19,30 @@ class UsuarioModel extends Model
     protected $updatedField  = 'atualizado_em';
     protected $deletedField  = 'deletado_em';
 
+   
+
+    protected $validationRules = [
+        'nome'     => 'required|min_length[4]|max_length[120]',
+        'email'        => 'required|valid_email|is_unique[usuarios.email]',
+        'email'        => 'required|exact_lenght[14]|is_unique[usuarios.cpf]',
+        'password'     => 'required|min_length[8]',
+        'password_confirmation' => 'required_with[password]|matches[password]',
+    ];
+    protected $validationMessages = [
+        'nome' => [
+            'required' => 'Campo obrigatório!',
+            
+        ],
+        'email' => [
+            'required' => 'Campo obrigatório!',
+            'is_unique' => 'O e-mail informado já existe, escolha outra conta de e-mail!',
+        ],
+        'cpf' => [
+            'required' => 'Campo obrigatório!',
+            'is_unique' => 'O CPF informado já existe, escolha outra conta de e-mail!',
+        ],
+    ];
+
     public function procurar($term)
     {
         if($term === null){
