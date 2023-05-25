@@ -33,10 +33,13 @@
                 </ul>
 
             <?php endif;?>
-                <form class="forms-sample">
-                    <input type="hidden" name="<?php echo csrf_token() ?>" value="<?php echo csrf_hash() ?>">
+                
+                <?php echo form_open("admin/usuarios/atualizar/$usuario->id"); ?>
+                
+            
                 
                     <?php echo $this->include('Admin/Usuarios/form');?>
+                <?php echo form_close()?>
                 </form>
             </div>
 
@@ -56,5 +59,9 @@
 
 
 <?php echo $this->section('scripts'); ?>
+
+    <link rel="stylesheet" href="<?php echo site_url('admin/vendors/mask/jquery.mask.min.js'); ?>">
+    <link rel="stylesheet" href="<?php echo site_url('admin/vendors/mask/app.js'); ?>">
+
 
 <?php echo $this->endSection(); ?>

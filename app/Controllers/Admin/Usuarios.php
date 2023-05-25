@@ -22,7 +22,7 @@ class Usuarios extends BaseController
             'usuarios' => $this->usuarioModel->findAll()
         ];
 
-       // session()->set('sucesso', 'Olá Wilker, que bom que está conosco!');
+      // session()->set('atencao', 'Olá Wilker, que bom que está conosco!');
 
         return view('Admin/Usuarios/index', $data);
     }
@@ -38,7 +38,7 @@ class Usuarios extends BaseController
         // echo '<pre>';
         // print_r($this->request->getGet());
         // exit;
-        if(!$this->requst->isAJAX()){
+        if(!$this->request->isAJAX()){
             exit('Página Não encontrada!');
         }
 
@@ -86,6 +86,37 @@ class Usuarios extends BaseController
         ];
 
         return view('Admin/Usuarios/editar', $data);
+    }
+
+
+    public function atualizar($id = null)
+    {
+        if($this->request->getMethod() === 'post'){
+            $usuario = $this->buscaUsuarioOu404($id);
+            $post = $this->request->getPost();
+
+            if(empty($post['password'])){
+                $this->usuarioModel->desabilitaValidacaoSenha();
+                unset($post['password']);
+                unset($post['password_confirmation']);
+            }
+
+            $usuario->fill($post);
+
+            if(!$usuario->hasChanged()){
+                return redirect()->back()->with('info', "Não há dados para atualizar!");
+            }
+
+            if($this->usuarioModel->protected(false)->save($usuario)){
+                return redirect()->to(site_url("admin/usuarios/show/$usuario->id"))
+                                                ->with('sucesso', "Usuário $usuario->nome atualizado com sucesso!");
+            }else{
+                return redirect()->back()->with('errors_model', $this->usuarioModel->errors())
+                                         ->with('atencao', "Por favor verifique os erros!")->withInput();
+            }
+        }else{
+            return redirect()->back();
+        }
     }
 
     /**

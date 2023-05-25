@@ -24,7 +24,8 @@ class UsuarioModel extends Model
     protected $validationRules = [
         'nome'     => 'required|min_length[4]|max_length[120]',
         'email'        => 'required|valid_email|is_unique[usuarios.email]',
-        'email'        => 'required|exact_lenght[14]|is_unique[usuarios.cpf]',
+        'telefone' => 'required',
+        'cpf'        => 'required|exact_lenght[14]|is_unique[usuarios.cpf]',
         'password'     => 'required|min_length[8]',
         'password_confirmation' => 'required_with[password]|matches[password]',
     ];
@@ -53,6 +54,12 @@ class UsuarioModel extends Model
                         ->like('nome', $term)
                         ->get()
                         ->getResult();
+    }
+
+    public function desabilitaValidacaoSenha()
+    {
+        unset($this->validationRules['password']);
+        unset($this->validationRules['password_confirmation']);
     }
 
    
