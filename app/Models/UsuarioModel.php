@@ -9,18 +9,18 @@ class UsuarioModel extends Model
     
     protected $table            = 'usuarios';
     protected $returnType       = 'App\Entities\Usuario';
-    protected $useSoftDeletes   = true;
     protected $allowedFields    = ['nome', 'email', 'telefone' ];
 
     // Dates
     protected $useTimestamps = true;
-    protected $dateFormat    = 'datetime';
     protected $createdField  = 'criado_em';
     protected $updatedField  = 'atualizado_em';
+    protected $dateFormat    = 'datetime';
+    protected $useSoftDeletes   = true;
     protected $deletedField  = 'deletado_em';
 
    
-
+    //validações
     protected $validationRules = [
         'nome'     => 'required|min_length[4]|max_length[120]',
         'email'        => 'required|valid_email|is_unique[usuarios.email]',

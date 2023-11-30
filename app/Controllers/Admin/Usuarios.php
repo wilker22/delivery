@@ -149,6 +149,18 @@ class Usuarios extends BaseController
         }
     }
 
+    public function excluir($id = null)
+    {
+        $usuario = $this->buscaUsuarioOu404($id);
+        
+        if($this->request->getMethod() === 'post'){
+            $this->usuarioModel->delete($id);
+            return redirect()->to(site_url('admin/usuarios'))->with('sucesso', "Usário $usuario->nome excluído com sucesso!");
+        }
+
+        return view('Admin/Usuarios/excluir', $data);
+    }
+
     /**
      * 
      * @param int $id
