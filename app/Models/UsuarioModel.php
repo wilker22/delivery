@@ -24,7 +24,8 @@ class UsuarioModel extends Model
     protected $validationRules = [
         'nome'     => 'required|min_length[4]|max_length[120]',
         'email'        => 'required|valid_email|is_unique[usuarios.email]',
-        'email'        => 'required|exact_lenght[14]|is_unique[usuarios.cpf]',
+        'telefone' => 'required',
+        'cpf'        => 'required|exact_lenght[14]|is_unique[usuarios.cpf]',
         'password'     => 'required|min_length[8]',
         'password_confirmation' => 'required_with[password]|matches[password]',
     ];
@@ -43,6 +44,22 @@ class UsuarioModel extends Model
         ],
     ];
 
+    //eventos callback
+    protected $beforeInsert = ['hashPassword'];
+    protected $beforeUpdate = ['hashPassword'];
+
+    protected function hashPassword(array $data)
+    {
+        if(isset($data['data']['password'])){
+            $data['data']['password_hash']= password_hash($data['data']['password'], PASSWORD_DEFAULT);
+
+            unset($data['data']['password']);
+            unset($data['data']['password_confimation']);
+        }
+
+        return $data;
+    }
+
     public function procurar($term)
     {
         if($term === null){
@@ -53,6 +70,12 @@ class UsuarioModel extends Model
                         ->like('nome', $term)
                         ->get()
                         ->getResult();
+    }
+
+    public function desabilitaValidacaoSenha()
+    {
+        unset($this->validationRules['password']);
+        unset($this->validationRules['password_confirmation']);
     }
 
    
