@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\UsuarioModel;
 use App\Entities\Usuario;
+use BackedEnum;
 
 class Usuarios extends BaseController
 {
@@ -152,6 +153,9 @@ class Usuarios extends BaseController
     public function excluir($id = null)
     {
         $usuario = $this->buscaUsuarioOu404($id);
+        if($usuario->is_admin){
+            return redirect()->back()->with('info', "Não é possível excluir um usuário administrador");
+        }
         
         if($this->request->getMethod() === 'post'){
             $this->usuarioModel->delete($id);
@@ -161,6 +165,25 @@ class Usuarios extends BaseController
         return view('Admin/Usuarios/excluir', $data);
     }
 
+    public function desfazerexclusao($id = null)
+    {
+        $usuario = $this->buscaUsuarioOu404($id);
+        
+        if($usuario->deletado_em == null){
+            return redirect()->back()->with('info', "Apenas usuários excluídos podem ser recuperados!");
+        }
+
+        if($this->usuarioModel->desfazerExclusao($id)){
+            return redirect()->back()->with('success', "Usuário recuperado com sucesso!");
+        }else{
+            return redirect()->back()
+                             ->with('errors_model', $this->usuarioModel->errors())
+                             ->with('atencao', 'Por favor verifique os erros abaixo')
+                             ->withInput();
+        }
+        
+    }
+
     /**
      * 
      * @param int $id
@@ -168,7 +191,7 @@ class Usuarios extends BaseController
      */
     private function buscaUsuarioOu404(int $id = null)
     {
-        if(!$id || !$usuario = $this->usuarioModel->where('id', $id)->first()){
+        if(!$id || !$usuario = $this->usuarioModel->withDeleted(true)->where('id', $id)->first()){
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Não encontramos o usuário $id");
         }
 
